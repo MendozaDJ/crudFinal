@@ -1,0 +1,94 @@
+
+-- ===============================================
+-- TRG_PARAMETROS_ACTUALIZARHISTORIAL
+-- ===============================================
+CREATE OR REPLACE TRIGGER trg_Parametros_ActualizarHistorial
+AFTER UPDATE ON PARAMETROS_SISTEMA
+FOR EACH ROW
+WHEN (OLD.valor <> NEW.valor)
+BEGIN
+    INSERT INTO HISTORIAL_PARAMETROS (
+        id_parametro,
+        valor_anterior,
+        valor_nuevo,
+        fecha_cambio,
+        usuario_cambio,
+        id_bibliotecario
+    ) VALUES (
+        :OLD.id_parametro,
+        :OLD.valor,
+        :NEW.valor,
+        SYSDATE,
+        :NEW.usuario_actualizacion,
+        NULL -- cambiar si se desea registrar al bibliotecario
+    );
+END;
+/
+
+-- ===============================================
+-- TRG_PRESTAMO_VENCIMIENTOAUTOMATICO
+-- ===============================================
+CREATE OR REPLACE TRIGGER trg_Prestamo_VencimientoAutomatico
+AFTER INSERT OR UPDATE ON PRESTAMO
+FOR EACH ROW
+BEGIN
+    IF :NEW.estado = 'ACTIVO' AND :NEW.fecha_devolucion_esperada < TRUNC(SYSDATE) THEN
+        UPDATE PRESTAMO
+        SET estado = 'VENCIDO'
+        WHERE id_prestamo = :NEW.id_prestamo;
+    END IF;
+END;
+/
+
+-- ===============================================
+-- HISTORIAL_MULTA Y TRG_MULTA_REGISTRARHISTORIAL
+-- ===============================================
+CREATE TABLE HISTORIAL_MULTA (
+    id_historial_multa NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id_multa           NUMBER,
+    estado_anterior    VARCHAR2(20),
+    estado_nuevo       VARCHAR2(20),
+    fecha_cambio       DATE DEFAULT SYSDATE,
+    motivo             VARCHAR2(200)
+);
+
+CREATE OR REPLACE TRIGGER trg_Multa_RegistrarHistorial
+AFTER UPDATE ON MULTA
+FOR EACH ROW
+WHEN (OLD.estado <> NEW.estado)
+BEGIN
+    INSERT INTO HISTORIAL_MULTA (
+        id_multa,
+        estado_anterior,
+        estado_nuevo,
+        motivo
+    ) VALUES (
+        :OLD.id_multa,
+        :OLD.estado,
+        :NEW.estado,
+        :NEW.motivo
+    );
+END;
+/
+
+-- ===============================================
+-- TRG_EJEMPLAR_CAMBIOESTADO
+-- ===============================================
+CREATE OR REPLACE TRIGGER trg_Ejemplar_CambioEstado
+AFTER UPDATE ON EJEMPLAR
+FOR EACH ROW
+WHEN (OLD.estado <> NEW.estado)
+BEGIN
+    INSERT INTO HISTORIAL_EJEMPLAR (
+        id_ejemplar,
+        estado_anterior,
+        estado_nuevo,
+        fecha_cambio
+    ) VALUES (
+        :OLD.id_ejemplar,
+        :OLD.estado,
+        :NEW.estado,
+        SYSDATE
+    );
+END;
+/

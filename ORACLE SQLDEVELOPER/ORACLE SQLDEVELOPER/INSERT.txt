@@ -1,0 +1,140 @@
+-- ROL
+INSERT INTO ROL (id_rol, nombre_rol, descripcion) VALUES (SEQ_ROL.NEXTVAL, 'ADMIN', 'Administrador del sistema');
+INSERT INTO ROL (id_rol, nombre_rol, descripcion) VALUES (SEQ_ROL.NEXTVAL, 'BIBLIOTECARIO', 'Usuario encargado de la gestión de la biblioteca');
+INSERT INTO ROL (id_rol, nombre_rol, descripcion) VALUES (SEQ_ROL.NEXTVAL, 'ESTUDIANTE', 'Estudiante con permisos limitados');
+SELECT * FROM USUARIO;
+
+-- USUARIO
+-- Admin
+INSERT INTO USUARIO (id_usuario, nombre_usuario, contrasena, correo, id_rol, estado, usuario_creacion)
+VALUES (SEQ_USUARIO.NEXTVAL, 'admin1', 'adminpass', 'admin@colegio.edu.pe', 1, 'ACTIVO', 'sistema');
+
+-- Bibliotecarios
+INSERT INTO USUARIO (id_usuario, nombre_usuario, contrasena, correo, id_rol, estado, usuario_creacion)
+VALUES (SEQ_USUARIO.NEXTVAL, 'biblio1', 'pass123', 'biblio1@colegio.edu.pe', 2, 'ACTIVO', 'admin1');
+INSERT INTO USUARIO (id_usuario, nombre_usuario, contrasena, correo, id_rol, estado, usuario_creacion)
+VALUES (SEQ_USUARIO.NEXTVAL, 'biblio2', 'pass123', 'biblio2@colegio.edu.pe', 2, 'ACTIVO', 'admin1');
+INSERT INTO USUARIO (id_usuario, nombre_usuario, contrasena, correo, id_rol, estado, usuario_creacion)
+VALUES (SEQ_USUARIO.NEXTVAL, 'biblio3', 'pass123', 'biblio3@colegio.edu.pe', 2, 'ACTIVO', 'admin1');
+
+-- Estudiantes
+INSERT INTO USUARIO (id_usuario, nombre_usuario, contrasena, correo, id_rol, estado, usuario_creacion)
+VALUES (SEQ_USUARIO.NEXTVAL, 'estu1', '123456', 'estu1@colegio.edu.pe', 3, 'ACTIVO', 'admin1');
+INSERT INTO USUARIO (id_usuario, nombre_usuario, contrasena, correo, id_rol, estado, usuario_creacion)
+VALUES (SEQ_USUARIO.NEXTVAL, 'estu2', '123456', 'estu2@colegio.edu.pe', 3, 'ACTIVO', 'admin1');
+INSERT INTO USUARIO (id_usuario, nombre_usuario, contrasena, correo, id_rol, estado, usuario_creacion)
+VALUES (SEQ_USUARIO.NEXTVAL, 'estu3', '123456', 'estu3@colegio.edu.pe', 3, 'ACTIVO', 'admin1');
+INSERT INTO USUARIO (id_usuario, nombre_usuario, contrasena, correo, id_rol, estado, usuario_creacion)
+VALUES (SEQ_USUARIO.NEXTVAL, 'estu4', '123456', 'estu4@colegio.edu.pe', 3, 'ACTIVO', 'admin1');
+INSERT INTO USUARIO (id_usuario, nombre_usuario, contrasena, correo, id_rol, estado, usuario_creacion)
+VALUES (SEQ_USUARIO.NEXTVAL, 'estu5', '123456', 'estu5@colegio.edu.pe', 3, 'ACTIVO', 'admin1');
+
+
+-- ESTUDIANTE
+INSERT INTO ESTUDIANTE (id_estudiante, id_usuario, codigo_estudiante, nombre, apellido, telefono, carrera, estado, usuario_creacion)
+VALUES (SEQ_ESTUDIANTE.NEXTVAL, 5, 'STU001', 'Carlos', 'Ramírez', '987654321', 'Ciencias', 'ACTIVO', 'admin1');
+INSERT INTO ESTUDIANTE (id_estudiante, id_usuario, codigo_estudiante, nombre, apellido, telefono, carrera, estado, usuario_creacion)
+VALUES (SEQ_ESTUDIANTE.NEXTVAL, 6, 'STU002', 'Lucía', 'Gonzales', '912345678', 'Matemáticas', 'ACTIVO', 'admin1');
+INSERT INTO ESTUDIANTE (id_estudiante, id_usuario, codigo_estudiante, nombre, apellido, telefono, carrera, estado, usuario_creacion)
+VALUES (SEQ_ESTUDIANTE.NEXTVAL, 7, 'STU003', 'Pedro', 'Quispe', '998877665', 'Literatura', 'ACTIVO', 'admin1');
+INSERT INTO ESTUDIANTE (id_estudiante, id_usuario, codigo_estudiante, nombre, apellido, telefono, carrera, estado, usuario_creacion)
+VALUES (SEQ_ESTUDIANTE.NEXTVAL, 8, 'STU004', 'Ana', 'Salas', '987123456', 'Historia', 'ACTIVO', 'admin1');
+INSERT INTO ESTUDIANTE (id_estudiante, id_usuario, codigo_estudiante, nombre, apellido, telefono, carrera, estado, usuario_creacion)
+VALUES (SEQ_ESTUDIANTE.NEXTVAL, 9, 'STU005', 'Diego', 'Flores', '954321789', 'Física', 'ACTIVO', 'admin1');
+
+
+-- BIBLIOTECARIO
+
+INSERT INTO BIBLIOTECARIO (id_bibliotecario, id_usuario, codigo_empleado, nombre, apellido, telefono, puesto, estado, usuario_creacion)
+VALUES (SEQ_BIBLIOTECARIO.NEXTVAL, 2, 'EMP001', 'Sonia', 'Peralta', '999888777', 'Jefa de Biblioteca', 'ACTIVO', 'admin1');
+INSERT INTO BIBLIOTECARIO (id_bibliotecario, id_usuario, codigo_empleado, nombre, apellido, telefono, puesto, estado, usuario_creacion)
+VALUES (SEQ_BIBLIOTECARIO.NEXTVAL, 3, 'EMP002', 'Luis', 'Torres', '988776655', 'Asistente', 'ACTIVO', 'admin1');
+INSERT INTO BIBLIOTECARIO (id_bibliotecario, id_usuario, codigo_empleado, nombre, apellido, telefono, puesto, estado, usuario_creacion)
+VALUES (SEQ_BIBLIOTECARIO.NEXTVAL, 4, 'EMP003', 'Marta', 'Lopez', '977665544', 'Catalogador', 'ACTIVO', 'admin1');
+
+
+-- CATEGORIA_LIBRO
+INSERT INTO CATEGORIA_LIBRO (id_categoria, nombre, descripcion, dias_prestamo, renovable)
+VALUES (SEQ_CATEGORIA_LIBRO.NEXTVAL, 'Literatura', 'Libros literarios escolares', 7, 'S');
+INSERT INTO CATEGORIA_LIBRO (id_categoria, nombre, descripcion, dias_prestamo, renovable)
+VALUES (SEQ_CATEGORIA_LIBRO.NEXTVAL, 'Ciencia', 'Libros científicos y de experimentos', 5, 'S');
+INSERT INTO CATEGORIA_LIBRO (id_categoria, nombre, descripcion, dias_prestamo, renovable)
+VALUES (SEQ_CATEGORIA_LIBRO.NEXTVAL, 'Historia', 'Libros históricos', 5, 'N');
+INSERT INTO CATEGORIA_LIBRO (id_categoria, nombre, descripcion, dias_prestamo, renovable)
+VALUES (SEQ_CATEGORIA_LIBRO.NEXTVAL, 'Matemática', 'Libros de teoría y problemas', 3, 'S');
+INSERT INTO CATEGORIA_LIBRO (id_categoria, nombre, descripcion, dias_prestamo, renovable)
+VALUES (SEQ_CATEGORIA_LIBRO.NEXTVAL, 'Infantil', 'Libros para niños de primaria', 10, 'S');
+INSERT INTO CATEGORIA_LIBRO (id_categoria, nombre, descripcion, dias_prestamo, renovable)
+VALUES (SEQ_CATEGORIA_LIBRO.NEXTVAL, 'Filosofía', 'Textos introductorios a la filosofía', 6, 'S');
+INSERT INTO CATEGORIA_LIBRO (id_categoria, nombre, descripcion, dias_prestamo, renovable)
+VALUES (SEQ_CATEGORIA_LIBRO.NEXTVAL, 'Arte', 'Libros de arte, pintura y dibujo', 4, 'S');
+INSERT INTO CATEGORIA_LIBRO (id_categoria, nombre, descripcion, dias_prestamo, renovable)
+VALUES (SEQ_CATEGORIA_LIBRO.NEXTVAL, 'Deporte', 'Libros sobre actividades físicas', 3, 'N');
+INSERT INTO CATEGORIA_LIBRO (id_categoria, nombre, descripcion, dias_prestamo, renovable)
+VALUES (SEQ_CATEGORIA_LIBRO.NEXTVAL, 'Computación', 'Libros de informática básica y avanzada', 7, 'S');
+INSERT INTO CATEGORIA_LIBRO (id_categoria, nombre, descripcion, dias_prestamo, renovable)
+VALUES (SEQ_CATEGORIA_LIBRO.NEXTVAL, 'Inglés', 'Libros para el aprendizaje del idioma inglés', 5, 'S');
+
+
+-- AUTOR
+INSERT INTO AUTOR (id_autor, nombre, apellido, pais_origen, fecha_nacimiento, biografia) VALUES 
+(SEQ_AUTOR.NEXTVAL, 'Gabriel', 'García Márquez', 'Colombia', TO_DATE('1927-03-06', 'YYYY-MM-DD'), 'Premio Nobel de Literatura, creador del realismo mágico.');
+INSERT INTO AUTOR VALUES (SEQ_AUTOR.NEXTVAL, 'Luis', 'Pérez', 'Perú', TO_DATE('1980-05-12', 'YYYY-MM-DD'), 'Autor de libros escolares.');
+INSERT INTO AUTOR VALUES (SEQ_AUTOR.NEXTVAL, 'Ana', 'Ramírez', 'España', TO_DATE('1975-09-21', 'YYYY-MM-DD'), 'Escritora de textos históricos.');
+INSERT INTO AUTOR VALUES (SEQ_AUTOR.NEXTVAL, 'Carlos', 'Torres', 'México', TO_DATE('1965-01-10', 'YYYY-MM-DD'), 'Matemático y autor de libros técnicos.');
+INSERT INTO AUTOR VALUES (SEQ_AUTOR.NEXTVAL, 'Lucía', 'Salazar', 'Chile', TO_DATE('1990-07-15', 'YYYY-MM-DD'), 'Autora de cuentos para niños.');
+INSERT INTO AUTOR VALUES (SEQ_AUTOR.NEXTVAL, 'Sofía', 'Nieto', 'Argentina', TO_DATE('1972-08-10', 'YYYY-MM-DD'), 'Especialista en filosofía educativa.');
+INSERT INTO AUTOR VALUES (SEQ_AUTOR.NEXTVAL, 'Miguel', 'Castro', 'México', TO_DATE('1985-02-14', 'YYYY-MM-DD'), 'Artista plástico y docente.');
+INSERT INTO AUTOR VALUES (SEQ_AUTOR.NEXTVAL, 'Valeria', 'Medina', 'Perú', TO_DATE('1992-06-30', 'YYYY-MM-DD'), 'Profesora de educación física.');
+INSERT INTO AUTOR VALUES (SEQ_AUTOR.NEXTVAL, 'Héctor', 'Fernández', 'España', TO_DATE('1970-11-22', 'YYYY-MM-DD'), 'Ingeniero de sistemas y autor.');
+INSERT INTO AUTOR VALUES (SEQ_AUTOR.NEXTVAL, 'Emily', 'Johnson', 'Estados Unidos', TO_DATE('1988-04-18', 'YYYY-MM-DD'), 'Autora de libros para aprender inglés.');
+
+
+-- LIBRO
+INSERT INTO LIBRO (id_libro, isbn, titulo, editorial, anio_publicacion, edicion, id_categoria, ubicacion, resumen, usuario_creacion) VALUES
+(SEQ_LIBRO.NEXTVAL, '978-84-376-0494-7', 'Cien años de soledad', 'Sudamericana', 1982, '3ra', 1, 'Estantería A1', 'Novela de realismo mágico', 'EMP001');
+INSERT INTO LIBRO (id_libro, isbn, titulo, editorial, anio_publicacion, edicion, id_categoria, ubicacion, resumen, usuario_creacion) VALUES 
+(SEQ_LIBRO.NEXTVAL, '978-612-317-085-1', 'Ciencias Naturales 6', 'Santillana', 2020, '1ra', 2, 'Estantería B2', 'Libro de ciencias escolares', 'EMP002');
+INSERT INTO LIBRO (id_libro, isbn, titulo, editorial, anio_publicacion, edicion, id_categoria, ubicacion, resumen, usuario_creacion) VALUES 
+(SEQ_LIBRO.NEXTVAL, '978-84-348-1096-6', 'Historia del Perú', 'SM', 2018, '2da', 3, 'Estantería C1', 'Historia nacional desde época precolombina', 'EMP001');
+INSERT INTO LIBRO (id_libro, isbn, titulo, editorial, anio_publicacion, edicion, id_categoria, ubicacion, resumen, usuario_creacion) VALUES 
+(SEQ_LIBRO.NEXTVAL, '978-84-9838-324-1', 'Álgebra', 'Alfaomega', 2015, '5ta', 4, 'Estantería D4', 'Libro de problemas matemáticos', 'EMP003');
+INSERT INTO LIBRO (id_libro, isbn, titulo, editorial, anio_publicacion, edicion, id_categoria, ubicacion, resumen, usuario_creacion) VALUES 
+(SEQ_LIBRO.NEXTVAL, '978-84-9414-376-5', 'Cuentos Infantiles', 'Norma', 2021, '1ra', 5, 'Estantería E1', 'Historias para niños de primaria', 'EMP003');
+INSERT INTO LIBRO (id_libro, isbn, titulo, editorial, anio_publicacion, edicion, id_categoria, ubicacion, resumen, usuario_creacion) VALUES 
+(SEQ_LIBRO.NEXTVAL, '978-612-304-987-1', 'Introducción a la Filosofía', 'Pearson', 2019, '2da', 6, 'Estantería F1', 'Principales corrientes filosóficas', 'EMP001');
+INSERT INTO LIBRO (id_libro, isbn, titulo, editorial, anio_publicacion, edicion, id_categoria, ubicacion, resumen, usuario_creacion) VALUES 
+(SEQ_LIBRO.NEXTVAL, '978-612-4083-12-2', 'Arte y Expresión', 'Trillas', 2021, '1ra', 7, 'Estantería G2', 'Técnicas básicas de dibujo y pintura', 'EMP002');
+INSERT INTO LIBRO (id_libro, isbn, titulo, editorial, anio_publicacion, edicion, id_categoria, ubicacion, resumen, usuario_creacion) VALUES 
+(SEQ_LIBRO.NEXTVAL, '978-612-3109-99-3', 'Educación Física Integral', 'Santillana', 2018, '2da', 8, 'Estantería H1', 'Rutinas de ejercicios para estudiantes', 'EMP003');
+INSERT INTO LIBRO (id_libro, isbn, titulo, editorial, anio_publicacion, edicion, id_categoria, ubicacion, resumen, usuario_creacion) VALUES 
+(SEQ_LIBRO.NEXTVAL, '978-612-4503-00-0', 'Informática Escolar', 'Alfaomega', 2022, '3ra', 9, 'Estantería I2', 'Manejo básico de computadoras', 'EMP001');
+INSERT INTO LIBRO (id_libro, isbn, titulo, editorial, anio_publicacion, edicion, id_categoria, ubicacion, resumen, usuario_creacion) VALUES
+(SEQ_LIBRO.NEXTVAL, '978-612-3010-78-0', 'English for Schools', 'Richmond', 2020, '1ra', 10, 'Estantería J3', 'Libro de inglés escolar con actividades', 'EMP002');
+
+-- LIBRO_AUTOR
+INSERT INTO LIBRO_AUTOR (id_libro, id_autor) VALUES (1, 1);
+INSERT INTO LIBRO_AUTOR (id_libro, id_autor)VALUES (3, 3);
+INSERT INTO LIBRO_AUTOR (id_libro, id_autor)VALUES (4, 4);
+INSERT INTO LIBRO_AUTOR (id_libro, id_autor)VALUES (5, 5);
+INSERT INTO LIBRO_AUTOR (id_libro, id_autor)VALUES (6, 6);
+INSERT INTO LIBRO_AUTOR (id_libro, id_autor)VALUES (7, 7);
+INSERT INTO LIBRO_AUTOR (id_libro, id_autor)VALUES (8, 8);
+INSERT INTO LIBRO_AUTOR (id_libro, id_autor)VALUES (9, 9);
+INSERT INTO LIBRO_AUTOR (id_libro, id_autor)VALUES (10, 10);
+select *from LIBRO_AUTOR;
+select *from AUTOR;
+select *from LIBRO;
+
+-- EJEMPLAR 
+INSERT INTO EJEMPLAR (id_ejemplar, id_libro, codigo_barras, estado, fecha_adquisicion, ubicacion_fisica) VALUES
+(SEQ_EJEMPLAR.NEXTVAL, 1, 'CB1001', 'DISPONIBLE', TO_DATE('2023-01-15', 'YYYY-MM-DD'), 'Estantería A1');
+INSERT INTO EJEMPLAR VALUES (SEQ_EJEMPLAR.NEXTVAL, 3, 'CB1003', 'DISPONIBLE', TO_DATE('2023-02-20', 'YYYY-MM-DD'), 'Estantería C1');
+INSERT INTO EJEMPLAR VALUES (SEQ_EJEMPLAR.NEXTVAL, 4, 'CB1004', 'REPARACION', TO_DATE('2022-11-05', 'YYYY-MM-DD'), 'Estantería D4');
+INSERT INTO EJEMPLAR VALUES (SEQ_EJEMPLAR.NEXTVAL, 5, 'CB1005', 'DISPONIBLE', TO_DATE('2024-01-12', 'YYYY-MM-DD'), 'Estantería E1');
+INSERT INTO EJEMPLAR VALUES (SEQ_EJEMPLAR.NEXTVAL, 6, 'CB1006', 'DISPONIBLE', TO_DATE('2023-04-01', 'YYYY-MM-DD'), 'Estantería F1');
+INSERT INTO EJEMPLAR VALUES (SEQ_EJEMPLAR.NEXTVAL, 7, 'CB1007', 'DISPONIBLE', TO_DATE('2023-05-12', 'YYYY-MM-DD'), 'Estantería G2');
+INSERT INTO EJEMPLAR VALUES (SEQ_EJEMPLAR.NEXTVAL, 8, 'CB1008', 'DISPONIBLE', TO_DATE('2023-06-20', 'YYYY-MM-DD'), 'Estantería H1');
+INSERT INTO EJEMPLAR VALUES (SEQ_EJEMPLAR.NEXTVAL, 9, 'CB1009', 'DISPONIBLE', TO_DATE('2023-07-05', 'YYYY-MM-DD'), 'Estantería I2');
+INSERT INTO EJEMPLAR VALUES (SEQ_EJEMPLAR.NEXTVAL, 10, 'CB1010', 'DISPONIBLE', TO_DATE('2023-08-15', 'YYYY-MM-DD'), 'Estantería J3');
+}
