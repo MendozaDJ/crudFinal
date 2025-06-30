@@ -1,0 +1,227 @@
+-- Crear secuencias necesarias
+CREATE SEQUENCE SEQ_PARAMETROS_SISTEMA START WITH 1;
+CREATE SEQUENCE SEQ_ROL START WITH 1;
+CREATE SEQUENCE SEQ_USUARIO START WITH 1;
+CREATE SEQUENCE SEQ_ESTUDIANTE START WITH 1;
+CREATE SEQUENCE SEQ_BIBLIOTECARIO START WITH 1;
+CREATE SEQUENCE SEQ_CATEGORIA_LIBRO START WITH 1;
+CREATE SEQUENCE SEQ_LIBRO START WITH 1;
+CREATE SEQUENCE SEQ_AUTOR START WITH 1;
+CREATE SEQUENCE SEQ_EJEMPLAR START WITH 1;
+CREATE SEQUENCE SEQ_PRESTAMO START WITH 1;
+CREATE SEQUENCE SEQ_DEVOLUCION START WITH 1;
+CREATE SEQUENCE SEQ_MULTA START WITH 1;
+CREATE SEQUENCE SEQ_HISTORIAL_PARAMETROS START WITH 1;
+CREATE SEQUENCE SEQ_HISTORIAL_EJEMPLAR START WITH 1;
+
+-- PARAMETROS_SISTEMA
+CREATE TABLE PARAMETROS_SISTEMA (
+    id_parametro NUMBER PRIMARY KEY,
+    nombre VARCHAR2(50) UNIQUE NOT NULL,
+    valor VARCHAR2(200) NOT NULL,
+    descripcion VARCHAR2(500),
+    fecha_actualizacion DATE DEFAULT SYSDATE NOT NULL,
+    usuario_actualizacion VARCHAR2(50) NOT NULL
+);
+
+-- ROL
+CREATE TABLE ROL (
+    id_rol NUMBER PRIMARY KEY,
+    nombre_rol VARCHAR2(50) UNIQUE NOT NULL,
+    descripcion VARCHAR2(200)
+);
+
+-- USUARIO
+CREATE TABLE USUARIO (
+    id_usuario NUMBER PRIMARY KEY,
+    nombre_usuario VARCHAR2(50) UNIQUE NOT NULL,
+    contrasena VARCHAR2(100) NOT NULL,
+    correo VARCHAR2(100) UNIQUE NOT NULL,
+    id_rol NUMBER NOT NULL,
+    fecha_registro DATE DEFAULT SYSDATE NOT NULL,
+    estado VARCHAR2(20) CHECK (estado IN ('ACTIVO', 'INACTIVO', 'BLOQUEADO')) NOT NULL,
+    fecha_creacion DATE DEFAULT SYSDATE,
+    usuario_creacion VARCHAR2(50),
+    fecha_modificacion DATE,
+    usuario_modificacion VARCHAR2(50),
+    FOREIGN KEY (id_rol) REFERENCES ROL(id_rol)
+);
+
+-- ESTUDIANTE
+CREATE TABLE ESTUDIANTE (
+    id_estudiante NUMBER PRIMARY KEY,
+    id_usuario NUMBER UNIQUE,
+    codigo_estudiante VARCHAR2(20) UNIQUE NOT NULL,
+    nombre VARCHAR2(100) NOT NULL,
+    apellido VARCHAR2(100) NOT NULL,
+    telefono VARCHAR2(20),
+    carrera VARCHAR2(100),
+    estado VARCHAR2(20) CHECK (estado IN ('ACTIVO', 'INACTIVO', 'SUSPENDIDO')) NOT NULL,
+    fecha_registro DATE DEFAULT SYSDATE NOT NULL,
+    fecha_creacion DATE DEFAULT SYSDATE,
+    usuario_creacion VARCHAR2(50),
+    fecha_modificacion DATE,
+    usuario_modificacion VARCHAR2(50),
+    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id_usuario)
+);
+
+-- BIBLIOTECARIO
+CREATE TABLE BIBLIOTECARIO (
+    id_bibliotecario NUMBER PRIMARY KEY,
+    id_usuario NUMBER UNIQUE,
+    codigo_empleado VARCHAR2(20) UNIQUE NOT NULL,
+    nombre VARCHAR2(100) NOT NULL,
+    apellido VARCHAR2(100) NOT NULL,
+    telefono VARCHAR2(20),
+    puesto VARCHAR2(50),
+    estado VARCHAR2(20) CHECK (estado IN ('ACTIVO', 'INACTIVO')) NOT NULL,
+    fecha_creacion DATE DEFAULT SYSDATE,
+    usuario_creacion VARCHAR2(50),
+    fecha_modificacion DATE,
+    usuario_modificacion VARCHAR2(50),
+    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id_usuario)
+);
+
+-- CATEGORIA_LIBRO
+CREATE TABLE CATEGORIA_LIBRO (
+    id_categoria NUMBER PRIMARY KEY,
+    nombre VARCHAR2(50) NOT NULL,
+    descripcion VARCHAR2(200),
+    dias_prestamo NUMBER NOT NULL,
+    renovable CHAR(1) CHECK (renovable IN ('S', 'N')) NOT NULL,
+    id_parametro_categoria NUMBER,
+    FOREIGN KEY (id_parametro_categoria) REFERENCES PARAMETROS_SISTEMA(id_parametro)
+);
+
+-- LIBRO
+CREATE TABLE LIBRO (
+    id_libro NUMBER PRIMARY KEY,
+    isbn VARCHAR2(20) UNIQUE NOT NULL,
+    titulo VARCHAR2(200) NOT NULL,
+    editorial VARCHAR2(100),
+    anio_publicacion NUMBER,
+    edicion VARCHAR2(20),
+    id_categoria NUMBER NOT NULL,
+    ubicacion VARCHAR2(100),
+    resumen CLOB,
+    fecha_creacion DATE DEFAULT SYSDATE,
+    usuario_creacion VARCHAR2(50),
+    fecha_modificacion DATE,
+    usuario_modificacion VARCHAR2(50),
+    FOREIGN KEY (id_categoria) REFERENCES CATEGORIA_LIBRO(id_categoria)
+);
+
+-- AUTOR
+CREATE TABLE AUTOR (
+    id_autor NUMBER PRIMARY KEY,
+    nombre VARCHAR2(100) NOT NULL,
+    apellido VARCHAR2(100) NOT NULL,
+    pais_origen VARCHAR2(50),
+    fecha_nacimiento DATE,
+    biografia CLOB
+);
+
+-- LIBRO_AUTOR
+CREATE TABLE LIBRO_AUTOR (
+    id_libro NUMBER,
+    id_autor NUMBER,
+    PRIMARY KEY (id_libro, id_autor),
+    FOREIGN KEY (id_libro) REFERENCES LIBRO(id_libro),
+    FOREIGN KEY (id_autor) REFERENCES AUTOR(id_autor)
+);
+
+-- EJEMPLAR
+CREATE TABLE EJEMPLAR (
+    id_ejemplar NUMBER PRIMARY KEY,
+    id_libro NUMBER NOT NULL,
+    codigo_barras VARCHAR2(50) UNIQUE NOT NULL,
+    estado VARCHAR2(20) CHECK (estado IN ('DISPONIBLE', 'PRESTADO', 'REPARACION', 'PERDIDO')) NOT NULL,
+    fecha_adquisicion DATE,
+    ubicacion_fisica VARCHAR2(100),
+    FOREIGN KEY (id_libro) REFERENCES LIBRO(id_libro)
+);
+
+-- PRESTAMO
+CREATE TABLE PRESTAMO (
+    id_prestamo NUMBER PRIMARY KEY,
+    id_estudiante NUMBER NOT NULL,
+    id_ejemplar NUMBER NOT NULL,
+    id_bibliotecario NUMBER NOT NULL,
+    fecha_prestamo DATE DEFAULT SYSDATE NOT NULL,
+    fecha_devolucion_esperada DATE NOT NULL,
+    fecha_devolucion_real DATE,
+    estado VARCHAR2(20) CHECK (estado IN ('ACTIVO', 'COMPLETADO', 'VENCIDO')) NOT NULL,
+    renovaciones NUMBER DEFAULT 0 NOT NULL,
+    id_parametro_prestamo NUMBER,
+    id_parametro_renovacion NUMBER,
+    fecha_creacion DATE DEFAULT SYSDATE,
+    usuario_creacion VARCHAR2(50),
+    fecha_modificacion DATE,
+    usuario_modificacion VARCHAR2(50),
+    FOREIGN KEY (id_estudiante) REFERENCES ESTUDIANTE(id_estudiante),
+    FOREIGN KEY (id_ejemplar) REFERENCES EJEMPLAR(id_ejemplar),
+    FOREIGN KEY (id_bibliotecario) REFERENCES BIBLIOTECARIO(id_bibliotecario),
+    FOREIGN KEY (id_parametro_prestamo) REFERENCES PARAMETROS_SISTEMA(id_parametro),
+    FOREIGN KEY (id_parametro_renovacion) REFERENCES PARAMETROS_SISTEMA(id_parametro)
+);
+
+-- DEVOLUCION
+CREATE TABLE DEVOLUCION (
+    id_devolucion NUMBER PRIMARY KEY,
+    id_prestamo NUMBER NOT NULL,
+    id_bibliotecario NUMBER NOT NULL,
+    fecha_devolucion DATE DEFAULT SYSDATE NOT NULL,
+    observaciones VARCHAR2(500),
+    FOREIGN KEY (id_prestamo) REFERENCES PRESTAMO(id_prestamo),
+    FOREIGN KEY (id_bibliotecario) REFERENCES BIBLIOTECARIO(id_bibliotecario)
+);
+
+-- MULTA
+CREATE TABLE MULTA (
+    id_multa NUMBER PRIMARY KEY,
+    id_prestamo NUMBER NOT NULL,
+    id_estudiante NUMBER NOT NULL,
+    monto NUMBER(10,2) NOT NULL,
+    fecha_generacion DATE DEFAULT SYSDATE NOT NULL,
+    fecha_pago DATE,
+    estado VARCHAR2(20) CHECK (estado IN ('PENDIENTE', 'PAGADA', 'CANCELADA')) NOT NULL,
+    motivo VARCHAR2(200) NOT NULL,
+    id_parametro_multa NUMBER,
+    FOREIGN KEY (id_prestamo) REFERENCES PRESTAMO(id_prestamo),
+    FOREIGN KEY (id_estudiante) REFERENCES ESTUDIANTE(id_estudiante),
+    FOREIGN KEY (id_parametro_multa) REFERENCES PARAMETROS_SISTEMA(id_parametro)
+);
+
+-- ROL_PARAMETRO
+CREATE TABLE ROL_PARAMETRO (
+    id_rol NUMBER,
+    id_parametro NUMBER,
+    nivel_acceso NUMBER CHECK (nivel_acceso BETWEEN 1 AND 3),
+    PRIMARY KEY (id_rol, id_parametro),
+    FOREIGN KEY (id_rol) REFERENCES ROL(id_rol),
+    FOREIGN KEY (id_parametro) REFERENCES PARAMETROS_SISTEMA(id_parametro)
+);
+
+-- HISTORIAL_PARAMETROS
+CREATE TABLE HISTORIAL_PARAMETROS (
+    id_historial NUMBER PRIMARY KEY,
+    id_parametro NUMBER NOT NULL,
+    valor_anterior VARCHAR2(200) NOT NULL,
+    valor_nuevo VARCHAR2(200) NOT NULL,
+    fecha_cambio DATE DEFAULT SYSDATE NOT NULL,
+    usuario_cambio VARCHAR2(50) NOT NULL,
+    id_bibliotecario NUMBER,
+    FOREIGN KEY (id_parametro) REFERENCES PARAMETROS_SISTEMA(id_parametro),
+    FOREIGN KEY (id_bibliotecario) REFERENCES BIBLIOTECARIO(id_bibliotecario)
+);
+
+-- HISTORIAL_EJEMPLAR
+CREATE TABLE HISTORIAL_EJEMPLAR (
+    id_historial NUMBER PRIMARY KEY,
+    id_ejemplar NUMBER NOT NULL,
+    estado_anterior VARCHAR2(20) NOT NULL,
+    estado_nuevo VARCHAR2(20) NOT NULL,
+    fecha_cambio DATE DEFAULT SYSDATE,
+    usuario VARCHAR2(50),
+    FOREIGN KEY (id_ejemplar) REFERENCES EJEMPLAR(id_ejemplar)
+);
